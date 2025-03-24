@@ -1,9 +1,11 @@
 import Button from "@/components/ui/button";
+import { getQuizStepByOrder } from "@/lib/actions/quizzes";
 import { useAppDispatch } from "@/lib/hooks/store.hook";
+import { updateState } from "@/lib/slices/quiz.slice";
 import { StrapiQuizStepType } from "@/types/strapi.type";
 import { useRouter } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 type QuizSubmitPropType = {
   disabled: boolean;
@@ -27,9 +29,58 @@ export default function QuizSubmit(props: QuizSubmitPropType) {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const isLastStep = false;
+  const isLastStep = useMemo(
+    () => steps.indexOf(documentId) + 1 === stepsAmount,
+    [documentId, steps, stepsAmount]
+  );
 
-  const onNext = useCallback(async () => {}, []);
+  const selectedOptions = useMemo(() => {
+    return options
+      .filter((option) => selected.includes(option.id))
+      .map((s) => s.title);
+  }, [options, selected]);
+
+  const nextStep = useMemo(() => {
+    const selectedItemNext = options.find((option) =>
+      selected.includes(option.id)
+    )?.next_step;
+
+    return selectedItemNext || next;
+  }, [options, selected, next]);
+
+  const onNext = useCallback(async () => {
+    let idPath = isLastStep ? "result" : nextStep?.documentId;
+
+    if (!idPath) {
+      const quiz = await getQuizStepByOrder(
+        order + 1 > stepsAmount ? 1 : order + 1
+      );
+
+      if (quiz.data?.[0]) {
+        idPath = quiz.data?.[0]?.documentId;
+      }
+    }
+
+    dispatch(
+      updateState({
+        key: documentId,
+        selected: selectedOptions,
+        next: idPath || "",
+      })
+    );
+
+    const nextPath = `/quiz/${idPath}`;
+    router.push(nextPath);
+  }, [
+    router,
+    documentId,
+    selectedOptions,
+    nextStep,
+    isLastStep,
+    stepsAmount,
+    order,
+    dispatch,
+  ]);
 
   return (
     <div className="fixed bottom-0 left-0 w-full py-3 px-4 bg-white">

@@ -3,4 +3,9 @@ type InitialStateType = {
   steps: string[];
 };
 
-export type { InitialStateType };
+type QuizResultType = {
+  right_anwers: Record<string, string[]>;
+  data: Record<string, string[]>;
+};
+
+export type { InitialStateType, QuizResultType };
