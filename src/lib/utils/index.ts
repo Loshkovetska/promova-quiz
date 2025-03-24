@@ -25,3 +25,26 @@ export const getStrapiMediaUrl = (url: string) => {
 
   return `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`;
 };
+
+export const getQuizSteps = (
+  steps: string[],
+  currentStep: string,
+  prevStep?: string
+) => {
+  let result;
+  const index = steps.indexOf(currentStep);
+  if (index !== -1) {
+    result = steps.filter((_, id) => id <= index);
+
+    if (prevStep) {
+      const prevIndex = steps.indexOf(prevStep);
+      result = result.filter((_, id) => id > prevIndex);
+    }
+  }
+
+  if (index === -1) {
+    result = [...steps, currentStep];
+  }
+
+  return result || [];
+};
