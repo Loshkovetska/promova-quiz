@@ -19,7 +19,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
     <html lang="en">
       <body className={`${openSans.variable} antialiased`}>
         <Providers>{children}</Providers>
-        <GoogleAnalytics gaId="G-XYZ" />
+        <GoogleAnalytics gaId="G-T6XLW2FKWK" />
       </body>
     </html>
   );
