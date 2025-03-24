@@ -3,6 +3,7 @@ import { getQuizStepByOrder } from "@/lib/actions/quizzes";
 import { useAppDispatch } from "@/lib/hooks/store.hook";
 import { updateState } from "@/lib/slices/quiz.slice";
 import { StrapiQuizStepType } from "@/types/strapi.type";
+import { sendGAEvent } from "@next/third-parties/google";
 import { useRouter } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
 import { useCallback, useMemo } from "react";
@@ -68,6 +69,18 @@ export default function QuizSubmit(props: QuizSubmitPropType) {
         next: idPath || "",
       })
     );
+
+    const passingData = JSON.stringify({
+      id: documentId,
+      selected: selectedOptions,
+    });
+    posthog.capture("quiz-answer", {
+      property: passingData,
+    });
+
+    sendGAEvent("event", "quiz-answer", {
+      value: passingData,
+    });
 
     const nextPath = `/quiz/${idPath}`;
     router.push(nextPath);
