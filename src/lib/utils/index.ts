@@ -48,3 +48,12 @@ export const getQuizSteps = (
 
   return result || [];
 };
+
+export const sortAndJoinStringArray = (arr: string[]) =>
+  JSON.parse(JSON.stringify(arr))
+    .sort((a: string, b: string) => a.localeCompare(b))
+    .join(",");
+
+export const compareTwoArrays = (arr1: string[], arr2: string[]) => {
+  return sortAndJoinStringArray(arr1) !== sortAndJoinStringArray(arr2);
+};
