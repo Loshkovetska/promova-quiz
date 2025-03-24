@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   quiz: {},
@@ -8,9 +8,15 @@ const initialState = {
 const quizSlice = createSlice({
   name: "quiz",
   initialState,
-  reducers: {},
+  reducers: {
+    setInitialState(state) {},
+    updateState(
+      state,
+      action: PayloadAction<{ key: string; selected: string[]; next: string }>
+    ) {},
+  },
 });
 
-export const {} = quizSlice.actions;
+export const { setInitialState, updateState } = quizSlice.actions;
 
 export default quizSlice;
