@@ -4,6 +4,8 @@ import { getQuizStepById, getQuizStepByOrder } from "@/lib/actions/quizzes";
 import { StrapiQuizStepType } from "@/types/strapi.type";
 import { RedirectType, notFound, redirect } from "next/navigation";
 
+export const revalidate = 3600;
+
 export default async function Page({
   params,
   searchParams,
