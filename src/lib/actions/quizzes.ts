@@ -6,6 +6,21 @@ import {
   StrapiQuizStepResponseType,
 } from "@/types/strapi.type";
 
+export async function getQuizSteps() {
+  return (await strapiClient()
+    .collection("quiz-steps")
+    .find({
+      fields: ["order"],
+      filters: {
+        quiz: {
+          documentId: {
+            $eq: process.env.NEXT_PUBLIC_QUIZ_ID || "",
+          },
+        },
+      },
+    })) as unknown as StrapiQuizStepOrderResponseType;
+}
+
 export async function getQuizStepByOrder(
   order: number
 ): Promise<StrapiQuizStepOrderResponseType> {

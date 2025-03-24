@@ -1,10 +1,23 @@
 import Header from "@/components/header";
 import Quiz from "@/components/quiz";
-import { getQuizStepById, getQuizStepByOrder } from "@/lib/actions/quizzes";
+import {
+  getQuizStepById,
+  getQuizStepByOrder,
+  getQuizSteps,
+} from "@/lib/actions/quizzes";
 import { StrapiQuizStepType } from "@/types/strapi.type";
 import { RedirectType, notFound, redirect } from "next/navigation";
 
 export const revalidate = 3600;
+
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const steps = await getQuizSteps();
+  return steps.data.map((step) => ({
+    id: step.documentId,
+  }));
+}
 
 export default async function Page({
   params,
