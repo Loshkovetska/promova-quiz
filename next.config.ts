@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "http",
         hostname: "localhost",
       },
+      {
+        protocol: "https",
+        hostname: "optimistic-desire-d80dc8463e.media.strapiapp.com",
+      },
     ],
   },
 };
