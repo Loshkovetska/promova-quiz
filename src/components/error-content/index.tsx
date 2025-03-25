@@ -30,7 +30,7 @@ export default function ErrorContent(props: ErrorContentPropType) {
     if (error) {
       posthog.captureException(error);
     }
-  }, [error]);
+  }, [error, posthog]);
 
   return (
     <div className="w-full flex flex-col gap-5 p-10 justify-center items-center grow">
