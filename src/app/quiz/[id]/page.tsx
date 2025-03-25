@@ -13,10 +13,14 @@ export const revalidate = 3600;
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const steps = await getQuizSteps();
-  return steps.data.map((step) => ({
-    id: step.documentId,
-  }));
+  try {
+    const steps = await getQuizSteps();
+    return steps.data.map((step) => ({
+      id: step.documentId,
+    }));
+  } catch (e) {
+    return [];
+  }
 }
 
 export default async function Page({
